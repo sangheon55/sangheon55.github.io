@@ -1,24 +1,68 @@
 ---
 import Base from '../layouts/Base.astro';
 import PaperList from '../components/PaperList.astro';
-import { SITE } from '../consts';
+import { INTERESTS, NEWS, SITE, TIMELINE } from '../consts';
 import { getPapers } from '../lib/content';
 
 const papers = (await getPapers()).slice(0, 5);
+const links = [
+  { label: 'Email', href: `mailto:${SITE.email}` },
+  { label: 'GitHub', href: SITE.github },
+  ...SITE.links,
+];
 ---
 
 <Base>
-  <section>
-    <h1>{SITE.author}</h1>
-    <p class="muted">{SITE.role}</p>
-    <p>{SITE.intro}</p>
-    <p class="small">
-      <a href={`mailto:${SITE.email}`}>Email</a> · <a href={SITE.github}>GitHub</a>
-      {SITE.links.map((l) => <> · <a href={l.href}>{l.label}</a></>)}
-    </p>
+  <section class="hero">
+    <div class="avatar" aria-hidden="true">{SITE.author.slice(0, 1)}</div>
+    <div>
+      <h1>{SITE.author}</h1>
+      <p class="muted hero-role">{SITE.role} · {SITE.affiliation}</p>
+      <div class="hero-links">
+        {links.map((l) => <a class="btn" href={l.href}>{l.label}</a>)}
+      </div>
+    </div>
   </section>
 
-  <h2>Recent Paper Reviews</h2>
-  <PaperList papers={papers} />
-  <p class="small"><a href="/papers/">모든 논문 리뷰 →</a></p>
+  <section>
+    {SITE.intro.map((p) => <p>{p}</p>)}
+  </section>
+
+  {INTERESTS.length > 0 && (
+    <section>
+      <h2>Research Interests</h2>
+      <p>{INTERESTS.map((i) => <span class="tag tag-lg">{i}</span>)}</p>
+    </section>
+  )}
+
+  {NEWS.length > 0 && (
+    <section>
+      <h2>News</h2>
+      <ul class="rows">
+        {NEWS.map((n) => (
+          <li><span class="muted row-key">{n.date}</span><span>{n.text}</span></li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section>
+    <h2>Recent Paper Reviews</h2>
+    {papers.length > 0 ? <PaperList papers={papers} /> : <p class="muted">아직 작성한 리뷰가 없습니다.</p>}
+    <p class="small"><a href="/papers/">모든 논문 리뷰 →</a></p>
+  </section>
+
+  {TIMELINE.length > 0 && (
+    <section>
+      <h2>Education & Experience</h2>
+      <ul class="rows">
+        {TIMELINE.map((t) => (
+          <li>
+            <span class="muted row-key">{t.period}</span>
+            <span><strong>{t.title}</strong>{t.detail && <span class="muted"> · {t.detail}</span>}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 </Base>
