@@ -1,0 +1,23 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PaperList from '../../../components/PaperList.astro';
+import { getPapers } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const papers = await getPapers();
+  const tags = [...new Set(papers.flatMap((p) => p.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: { tag, papers: papers.filter((p) => p.data.tags.includes(tag)) },
+  }));
+}
+
+const { tag, papers } = Astro.props;
+---
+
+<Base title={`#${tag}`}>
+  <h1>#{tag}</h1>
+  <p class="muted">{papers.length}개의 리뷰</p>
+  <PaperList papers={papers} />
+  <p class="small"><a href="/papers/">← 전체 목록</a></p>
+</Base>

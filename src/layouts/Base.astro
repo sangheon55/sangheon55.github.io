@@ -1,0 +1,54 @@
+---
+import '../styles/global.css';
+import { SITE } from '../consts';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = SITE.description } = Astro.props;
+const pageTitle = title ? `${title} | ${SITE.title}` : SITE.title;
+const path = Astro.url.pathname;
+const nav = [
+  { href: '/projects/', label: 'Projects' },
+  { href: '/papers/', label: 'Papers' },
+];
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">{SITE.title}</a>
+      <nav>
+        {nav.map((n) => (
+          <a href={n.href} class={path.startsWith(n.href) ? 'active' : ''}>{n.label}</a>
+        ))}
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      © {new Date().getFullYear()} {SITE.author} · <a href={SITE.github}>GitHub</a> · <a href="/rss.xml">RSS</a>
+    </footer>
+  </body>
+</html>

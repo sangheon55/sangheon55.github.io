@@ -1,0 +1,38 @@
+---
+import { render } from 'astro:content';
+import 'katex/dist/katex.min.css';
+import Base from '../../layouts/Base.astro';
+import { formatDate, getPapers } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const papers = await getPapers();
+  return papers.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, description, date, paper, tags } = entry.data;
+---
+
+<Base title={title} description={description ?? paper.title}>
+  <article>
+    <h1>{title}</h1>
+    <div class="item-meta muted small">
+      <time datetime={date.toISOString()}>{formatDate(date)}</time>
+      <span>{tags.map((t) => <a class="tag" href={`/papers/tags/${encodeURIComponent(t)}/`}>{t}</a>)}</span>
+    </div>
+    <div class="paper-card">
+      <div class="paper-title">
+        {paper.url ? <a href={paper.url}>{paper.title}</a> : paper.title}
+      </div>
+      {paper.authors && <div class="muted">{paper.authors}</div>}
+      {(paper.venue || paper.year) && (
+        <div class="muted">{[paper.venue, paper.year].filter(Boolean).join(' ')}</div>
+      )}
+    </div>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+  <p class="small"><a href="/papers/">← 논문 리뷰 목록</a></p>
+</Base>

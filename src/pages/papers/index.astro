@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import PaperList from '../../components/PaperList.astro';
+import { getPapers } from '../../lib/content';
+
+const papers = await getPapers();
+const tags = [...new Set(papers.flatMap((p) => p.data.tags))].sort();
+---
+
+<Base title="Paper Reviews" description="읽은 논문 정리와 리뷰">
+  <h1>Paper Reviews</h1>
+  <p class="muted">읽은 논문을 정리하고 생각을 남깁니다.</p>
+  {tags.length > 0 && (
+    <p>{tags.map((t) => <a class="tag" href={`/papers/tags/${encodeURIComponent(t)}/`}>{t}</a>)}</p>
+  )}
+  <PaperList papers={papers} />
+</Base>

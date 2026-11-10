@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/content';
+
+interface Props {
+  papers: CollectionEntry<'papers'>[];
+}
+
+const { papers } = Astro.props;
+---
+
+<ul class="list">
+  {papers.map((p) => (
+    <li>
+      <a class="item-title" href={`/papers/${p.id}/`}>{p.data.title}</a>
+      <div class="muted small">
+        {p.data.paper.title}
+        {p.data.paper.venue && ` · ${p.data.paper.venue}`}
+        {p.data.paper.year && ` ${p.data.paper.year}`}
+      </div>
+      <div class="item-meta">
+        <time datetime={p.data.date.toISOString()}>{formatDate(p.data.date)}</time>
+        <span>
+          {p.data.tags.map((t) => (
+            <a class="tag" href={`/papers/tags/${encodeURIComponent(t)}/`}>{t}</a>
+          ))}
+        </span>
+      </div>
+    </li>
+  ))}
+</ul>

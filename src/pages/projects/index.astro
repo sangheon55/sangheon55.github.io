@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectList from '../../components/ProjectList.astro';
+import { getProjects } from '../../lib/content';
+
+const projects = await getProjects();
+---
+
+<Base title="Projects" description="진행한 프로젝트">
+  <h1>Projects</h1>
+  <p class="muted">진행했던 프로젝트들입니다.</p>
+  <ProjectList projects={projects} />
+</Base>
