@@ -20,18 +20,4 @@ const papers = defineCollection({
   }),
 });
 
-const projects = defineCollection({
-  loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    date: z.coerce.date(),
-    tech: z.array(z.string()).default([]),
-    github: z.string().url().optional(),
-    demo: z.string().url().optional(),
-    featured: z.boolean().default(false),
-    draft: z.boolean().default(false),
-  }),
-});
-
-export const collections = { papers, projects };
+export const collections = { papers };

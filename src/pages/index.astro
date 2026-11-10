@@ -1,14 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import PaperList from '../components/PaperList.astro';
-import ProjectList from '../components/ProjectList.astro';
 import { SITE } from '../consts';
-import { getPapers, getProjects } from '../lib/content';
+import { getPapers } from '../lib/content';
 
 const papers = (await getPapers()).slice(0, 5);
-const allProjects = await getProjects();
-const featured = allProjects.filter((p) => p.data.featured);
-const projects = (featured.length ? featured : allProjects).slice(0, 4);
 ---
 
 <Base>
@@ -21,10 +17,6 @@ const projects = (featured.length ? featured : allProjects).slice(0, 4);
       {SITE.links.map((l) => <> · <a href={l.href}>{l.label}</a></>)}
     </p>
   </section>
-
-  <h2>Projects</h2>
-  <ProjectList projects={projects} />
-  <p class="small"><a href="/projects/">모든 프로젝트 →</a></p>
 
   <h2>Recent Paper Reviews</h2>
   <PaperList papers={papers} />

@@ -1,6 +1,6 @@
-﻿# sangheon55.github.io
+# sangheon55.github.io
 
-Astro로 만든 개인 포트폴리오 + 논문 리뷰 사이트. `main`에 push하면 GitHub Actions로 자동 배포됩니다.
+Astro로 만든 개인 소개 + 논문 리뷰 사이트. `main`에 push하면 GitHub Actions로 자동 배포됩니다.
 
 ## 로컬 실행
 
@@ -12,7 +12,6 @@ npm run dev      # http://localhost:4321
 ## 글 쓰기
 
 - **논문 리뷰**: `src/content/papers/<slug>.md`
-- **프로젝트**: `src/content/projects/<slug>.md`
 - **소개/링크**: `src/consts.ts`
 
 논문 리뷰 frontmatter 예시:
